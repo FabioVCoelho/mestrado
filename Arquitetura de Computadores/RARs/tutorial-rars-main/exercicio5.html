@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercício 5 - Linguagem Assembly RISC-V</title>
+    <style>
+      @media print {
+        @page {
+          size: A2 portrait;
+          margin: 10mm;
+        }
+
+        body {
+          width: auto;
+          margin: 0;
+          padding: 0;
+        }
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 20px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #49a1d4;
+      }
+      code,
+      pre {
+        background-color: #f0f0f0;
+        padding: 10px;
+        display: block;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        margin-bottom: 20px;
+      }
+      img {
+        max-width: 100%;
+        margin: 20px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #49a1d4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      input {
+        width: 100%;
+        border: none;
+        text-align: center;
+        background: transparent;
+        font-family: monospace;
+      }
+      .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+      .tg td {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg .tg-7btt {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: center;
+
+        vertical-align: top;
+      }
+      .tg .tg-fymr {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0pky {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0lax {
+        text-align: left;
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Exercício 05</h1>
+    <h3 for="studentName"><strong>Nome do aluno:</strong></h3>
+    <input
+      type="text"
+      id="studentName"
+      name="studentName"
+      placeholder="Digite seu nome aqui"
+      style="
+        margin-bottom: 20px;
+        display: block;
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background: transparent;
+        border: none;
+        font-family: Arial, sans-serif;
+      "
+    />
+
+    <h2>Objetivo</h2>
+    <p>
+      Consolidar o aprendizado da linguagem Assembly RISC-V e compreender como
+      as instruções de desvio condicional são executadas.
+    </p>
+
+    <h2>Instruções</h2>
+    <ol>
+      <li>Abra o simulador de linguagem RISC-V.</li>
+      <li>No editor de texto do simulador, transcreva o código abaixo:</li>
+    </ol>
+
+    <pre><code>
+      # ------------------------------------------------------------
+      # Exercício 05 - Baseado em Patterson pág. 67 (versão RISC-V)
+      # Trecho em C: while (save[i] == k) i = i + 1;
+      # ------------------------------------------------------------
+
+      .data
+      Array_save: .word 3, 3, 1, 3, 3, 1, 4, 3, 1  # save[0] até save[8]
+
+      .text
+      main:
+          la   s6, Array_save     # endereço base de save[]
+          addi s5, zero, 3        # k = 3
+          addi s3, zero, 0        # i = 0
+
+      Loop:
+          add  t1, s3, s3         # t1 = s3 * 2
+          add  t1, t1, t1         # t1 = s3 * 4
+          add  t1, t1, s6         # t1 = endereço de save[i]
+          lw   t0, 0(t1)          # t0 = save[i]
+          bne  t0, s5, Exit       # se save[i] != k, vai para Exit
+          addi  s3, s3, 1         # i = i + j
+          j    Loop               # repete o laço
+
+      Exit:
+          nop                    # fim do laço
+    </code></pre>
+
+    <h2>Montagem e Execução</h2>
+    <p>Clique no botão <strong>Assemble</strong> para montar o programa.</p>
+    <img src="imgs/assemble4.png" style="width: 99%" alt="Botão Assemble" />
+
+    <p>
+      Faça a execução passo-a-passo do programa e, a cada instrução, preencha a
+      tabela abaixo cada vez que o valor de um registrador ou posição da memória
+      de dados for modificado.
+    </p>
+
+    <div class="tg-wrapper">
+      <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-7btt" colspan="4">Antes da execução da instrução</th>
+            <th class="tg-7btt" colspan="6">
+              Depois da execução da <br />
+              instrução
+            </th>
+          </tr>
+          <tr>
+            <th class="tg-7btt">PC</th>
+            <th class="tg-7btt">Instrução</th>
+            <th class="tg-7btt" colspan="2">Pseudoinstrução</th>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt">i</th>
+            <th class="tg-7btt">j</th>
+            <th class="tg-7btt">k</th>
+            <th class="tg-7btt">save</th>
+          </tr>
+          <tr>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt" colspan="2"></th>
+            <th class="tg-7btt">R5</th>
+            <th class="tg-7btt">R6</th>
+            <th class="tg-7btt">R19</th>
+            <th class="tg-7btt">R20</th>
+            <th class="tg-7btt">R21</th>
+            <th class="tg-7btt">R22</th>
+          </tr>
+          <tr>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt" colspan="2"></th>
+            <th class="tg-7btt">(t0)</th>
+            <th class="tg-7btt">(t1)</th>
+            <th class="tg-7btt">(s3)</th>
+            <th class="tg-7btt">(s4)</th>
+            <th class="tg-7btt">(s5)</th>
+            <th class="tg-7btt">(s6)</th>
+          </tr>
+          <tr>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt"></th>
+            <th class="tg-7btt" colspan="2"></th>
+            <th class="tg-7btt">0x00000000</th>
+            <th class="tg-7btt">0x00000000</th>
+            <th class="tg-7btt">0x00000000</th>
+            <th class="tg-7btt">0x00000000</th>
+            <th class="tg-7btt">0x00000000</th>
+            <th class="tg-7btt">0x00000000</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-fymr">0x00400000</td>
+            <td class="tg-fymr">auipc x22, 64528</td>
+            <td class="tg-7btt" colspan="2">la s6, Array_save</td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt">0x10010000</td>
+          </tr>
+          <tr>
+            <td class="tg-fymr">0x00400004</td>
+            <td class="tg-fymr">addi x22 x22 0</td>
+            <td class="tg-7btt" colspan="2"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+            <td class="tg-7btt"></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+          <tr>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td colspan="2"><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+            <td><input type="text" /></td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          background-color: #fff3cd;
+          border-left: 5px solid #ffa502;
+          padding: 10px;
+          font-weight: bold;
+        "
+      >
+        OBS: Salve o PDF em formato <strong>A2</strong> e
+        <strong>Paisagem</strong> para garantir que todas as informações da
+        página fiquem visíveis
+      </p>
+      <button type="button" onclick="addRow()">Adicionar linha</button>
+      <button type="button" onclick="window.print()">Salvar como PDF</button>
+    </div>
+
+    <p>
+      Se desejar reiniciar o programa, clique no botão <strong>Reset</strong>.
+    </p>
+    <img src="imgs/resetButton.png" alt="Botão Reset" />
+
+    <p><a href="tutorial-rars.html#exercises">&larr; Voltar ao tutorial</a></p>
+  </body>
+  <script>
+    function addRow() {
+      const tabela = document.querySelector(".tg tbody");
+      const novaLinha = document.createElement("tr");
+
+      novaLinha.innerHTML = `
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td colspan="2"><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>
+        <td><input type="text" /></td>
+      `;
+
+      tabela.appendChild(novaLinha);
+    }
+  </script>
+</html>

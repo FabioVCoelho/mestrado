@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercício 2 - Linguagem Assembly RISC-V</title>
+    <style>
+      @media print {
+        @page {
+          size: A2 portrait;
+          margin: 10mm;
+        }
+
+        body {
+          width: auto;
+          margin: 0;
+          padding: 0;
+        }
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 20px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #49a1d4;
+      }
+      code,
+      pre {
+        background-color: #f0f0f0;
+        padding: 10px;
+        display: block;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        margin-bottom: 20px;
+      }
+      img {
+        max-width: 100%;
+        margin: 20px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #49a1d4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      input {
+        width: 100%;
+        border: none;
+        text-align: center;
+        background: transparent;
+        font-family: monospace;
+      }
+      .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+      .tg td {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg .tg-7btt {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: center;
+
+        vertical-align: top;
+      }
+      .tg .tg-fymr {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0pky {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0lax {
+        text-align: left;
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Exercício 02</h1>
+    <h3 for="studentName"><strong>Nome do aluno:</strong></h3>
+    <input
+      type="text"
+      id="studentName"
+      name="studentName"
+      placeholder="Digite seu nome aqui"
+      style="
+        margin-bottom: 20px;
+        display: block;
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background: transparent;
+        border: none;
+        font-family: Arial, sans-serif;
+      "
+    />
+
+    <h2>Objetivo</h2>
+    <p>
+      Aprender a manipular vetores e endereços de memória utilizando a linguagem
+      de montagem RISC-V.
+    </p>
+
+    <h2>Instruções</h2>
+    <ol>
+      <li>Abra o simulador de linguagem RISC-V.</li>
+      <li>No editor de texto do simulador, transcreva o código abaixo:</li>
+    </ol>
+
+    <pre><code>    # ------------------------------------------------------------
+    # Exercício 02 - Baseado em Patterson pags. 54/55/56 (versão RISC-V)
+    # Expressão em C: A[12] = h + A[8]
+    # ------------------------------------------------------------
+        
+        .data
+        Array_A: .word 0, 10, 20, 30, 40, 50, 60, 70,
+                       80, 90, 100, 110, 120, 130, 140, 150
+        
+        .text
+    main:
+        addi s2, zero, 1         # h = 1
+        la   s3, Array_A         # s3 = endereço base do vetor A
+        lw   t0, 32(s3)          # t0 = A[8] (32 = 4 * 8)
+        add  t0, s2, t0          # t0 = h + A[8]
+        sw   t0, 48(s3)          # A[12] = t0 (48 = 4 * 12)</code></pre>
+
+    <p>
+      O vetor <strong>Array_A</strong> possui 16 inteiros, cada um ocupando 4
+      bytes, armazenados sequencialmente na memória. O endereço inicial é
+      atribuido pelo montador, em <strong>0x10010000</strong>.
+    </p>
+
+    <p>
+      Observe que a instrução <strong>la</strong> é uma pseudo-instrução
+      traduzida pelo montador para duas instruções reais:
+      <strong>auipc</strong> e <strong>addi</strong>, responsáveis por carregar
+      o endereço base no registrador.
+    </p>
+
+    <h2>Montagem e Execução</h2>
+    <p>Clique no botão <strong>Assemble</strong> para montar o programa.</p>
+    <img src="imgs/assemble1.png" style="width: 99%" alt="Botão Assemble" />
+
+    <p>
+      Após a montagem, é possível visualizar o conteúdo das regiões de memória
+      por meio da janela de segmentos. Nela, o usuário pode alternar entre:
+    </p>
+    <ul>
+      <li>
+        <strong>Segmento de dados (.data):</strong> região onde ficam
+        armazenadas variáveis como vetores e constantes. Endereço inicial:
+        <code>0x10010000 (.data)</code>.
+      </li>
+      <li>
+        <strong>Segmento da pilha (sp):</strong> utilizado para chamadas de
+        função e variáveis locais. Pode ser identificado como
+        <code>0x7FFFEFE0 (sp)</code>.
+      </li>
+      <li>
+        <strong>Segmento de texto (.text):</strong> contém as instruções do
+        programa. Endereço inicial: <code>0x00400000 (.text)</code>.
+      </li>
+    </ul>
+
+    <p>Exemplos das áreas visíveis:</p>
+    <p><strong>Área do segmento de dados</strong></p>
+    <img src="imgs/dataSeg.png" alt="Área de dados do programa (.data)" />
+
+    <p><strong>Área da pilha</strong></p>
+    <img src="imgs/healpSeg.png" alt="Área da pilha (stack)" />
+
+    <p><strong>Área do segmento de texto</strong></p>
+    <img src="imgs/textSeg.png" alt="Área de instruções (.text)" />
+
+    <p>
+      Na seção DATA, os elementos do vetor são armazenados em células de memória
+      organizadas de forma matricial, sendo que o endereço inicial do vetor é
+      igual a <strong>0x10010000</strong> conforme a tabela a seguir:
+    </p>
+
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-7btt" rowspan="2">Endereço da linha</th>
+          <th class="tg-7btt" colspan="8">Deslocamento</th>
+        </tr>
+        <tr>
+          <th class="tg-7btt">(+0)</th>
+          <th class="tg-7btt">(+4)</th>
+          <th class="tg-7btt">(+8)</th>
+          <th class="tg-7btt">(+12)</th>
+          <th class="tg-7btt">(+16)</th>
+          <th class="tg-7btt">(+20)</th>
+          <th class="tg-7btt">(+24)</th>
+          <th class="tg-7btt">(+28)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-fymr">0x10010000</td>
+          <td class="tg-7btt">Array_A[0]</td>
+          <td class="tg-7btt">Array_A[1]</td>
+          <td class="tg-7btt">Array_A[2]</td>
+          <td class="tg-7btt">Array_A[3]</td>
+          <td class="tg-7btt">Array_A[4]</td>
+          <td class="tg-7btt">Array_A[5]</td>
+          <td class="tg-7btt">Array_A[6]</td>
+          <td class="tg-7btt">Array_A[7]</td>
+        </tr>
+        <tr>
+          <td class="tg-fymr">0x10010020</td>
+          <td class="tg-7btt">Array_A[8]</td>
+          <td class="tg-7btt">Array_A[9]</td>
+          <td class="tg-7btt">Array_A[10]</td>
+          <td class="tg-7btt">Array_A[11]</td>
+          <td class="tg-7btt">Array_A[12]</td>
+          <td class="tg-7btt">Array_A[13]</td>
+          <td class="tg-7btt">Array_A[14]</td>
+          <td class="tg-7btt">Array_A[15]</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Entendendo os endereços dos elementos</h2>
+    <p>
+      Cada elemento do vetor ocupa 4 bytes na memória. Para saber o endereço de
+      um elemento, somamos o endereço da linha com o deslocamento da coluna.
+    </p>
+    <p>
+      Por exemplo, para localizar o elemento <strong>Array_A[11]</strong>, veja
+      os passos:
+    </p>
+    <ul>
+      <li>
+        Sabemos que ele está na segunda linha, coluna de deslocamento +12.
+      </li>
+      <li>O endereço da linha é <code>0x10010020</code>.</li>
+      <li>O deslocamento +12 equivale a <code>0xC</code> em hexadecimal.</li>
+      <li>Somando: <code>0x10010020 + 0xC = 0x1001002C</code></li>
+    </ul>
+    <p>Outra forma de calcular, a partir do endereço base do vetor:</p>
+
+    <code
+      >0x10010000 + (4 x 11) = 0x10010000 + 44 = 0x10010000 + 0x2C =
+      0x1001002C</code
+    >
+
+    <p>
+      Portanto, usamos:
+      <br />
+      <code> (end. base em hexa) + (4 x posArray dec.) = (end. desejado) </code>
+    </p>
+
+    <h2>Importante</h2>
+    <p>
+      Os valores definidos no vetor <strong>Array_A</strong> são escritos em
+      decimal no código-fonte, mas armazenados na memória em formato
+      hexadecimal. Por exemplo:
+    </p>
+    <ul>
+      <li>
+        <strong>Array_A[8]</strong> no código é <strong>80</strong> (decimal).
+      </li>
+      <li>Na memória, aparece como <strong>0x00000050</strong>.</li>
+    </ul>
+    <p>
+      De acordo com o código, o registrador <strong>s2</strong> guarda o valor
+      <strong>1</strong> e será somado ao conteúdo de
+      <strong>Array_A[8]</strong>. O resultado será armazenado em
+      <strong>Array_A[12]</strong>.
+    </p>
+    <p>
+      Execute o programa passo-a-passo clicando no botão
+      <strong>Run One Step</strong> até chegar à segunda instrução (endereço
+      <strong>0x00400004</strong>)
+    </p>
+
+    <p>
+      Abaixo, observe, na terceira coluna, que a instrução a ser executada é
+      <strong>auipc x19 64528</strong> (referente a <strong>Array_A</strong>),
+      mas que originalmente foi especificada como
+      <strong>la s3, Array_A</strong>. A instrução <strong>la</strong> (load
+      address) é uma pseudo-instrução que o montador traduz para uma sequência
+      das instruções reais <strong>auipc</strong> (Add Upper Immediate to PC) e
+      <strong>addi</strong> no RISC-V. Essa sequência é responsável por carregar
+      o endereço-base do vetor (<strong>Array_A</strong>) no registrador
+      <strong>s3</strong>, possibilitando o acesso aos seus elementos por meio
+      de deslocamentos.
+    </p>
+    <img src="imgs/pseudoExample.png" alt="Exemplo de pseudo-instrução la" />
+
+    <p>
+      Faça a execução passo-a-passo do programa e, a cada instrução, preencha a
+      tabela abaixo cada vez que o valor de um registrador ou posição da memória
+      de dados for modificado.
+    </p>
+
+    <form id="execTable">
+      <div class="tg-wrapper">
+        <table class="tg">
+          <thead>
+            <tr>
+              <th class="tg-7btt" colspan="3">Antes</th>
+              <th class="tg-7btt" colspan="9">
+                Depois da execução da instrução
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="tg-7btt" rowspan="2">PC</td>
+              <td class="tg-7btt" rowspan="2">Instrução<br /></td>
+              <td class="tg-7btt" rowspan="2">Pseudoinstrução</td>
+              <td class="tg-7btt" colspan="3">Registradores</td>
+              <td class="tg-7btt" colspan="6">Segmento de Dados</td>
+            </tr>
+            <tr>
+              <td class="tg-7btt">R5</td>
+              <td class="tg-7btt">R18</td>
+              <td class="tg-7btt">R19</td>
+              <td class="tg-7btt">0x10010000</td>
+              <td class="tg-7btt">...</td>
+              <td class="tg-7btt">0x10010020</td>
+              <td class="tg-7btt">...</td>
+              <td class="tg-7btt">0x10010030</td>
+              <td class="tg-7btt">...</td>
+            </tr>
+            <tr>
+              <td class="tg-0pky"></td>
+              <td class="tg-0pky"></td>
+              <td class="tg-0pky"></td>
+              <td class="tg-7btt">(t0)</td>
+              <td class="tg-7btt">(s2)</td>
+              <td class="tg-7btt">(s3)</td>
+              <td class="tg-7btt">Array_A[0]<br />1º linha coluna(+0)</td>
+              <td class="tg-7btt">...</td>
+              <td class="tg-7btt">Array_A[8]<br />2º linha coluna(+0)</td>
+              <td class="tg-7btt">...</td>
+              <td class="tg-7btt">Array_A[12]<br />2º linha coluna(+10)</td>
+              <td class="tg-7btt">...</td>
+            </tr>
+            <tr>
+              <td class="tg-0pky"></td>
+              <td class="tg-0pky"></td>
+              <td class="tg-0pky"></td>
+              <td class="tg-7btt">0x00000000</td>
+              <td class="tg-7btt">0x00000000</td>
+              <td class="tg-7btt">0x00000000</td>
+              <td class="tg-7btt">0x00000000</td>
+              <td class="tg-7btt"></td>
+              <td class="tg-7btt">0x00000050</td>
+              <td class="tg-amwm"></td>
+              <td class="tg-7btt">0x00000078</td>
+              <td class="tg-0lax"></td>
+            </tr>
+            <tr>
+              <td class="tg-fymr">0x00400000</td>
+              <td class="tg-fymr">addi s2, zero, 1</td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-7btt"></td>
+              <td class="tg-7btt">0x00000001</td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-baqh"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-0lax"></td>
+              <td class="tg-0lax"></td>
+            </tr>
+            <tr>
+              <td class="tg-fymr">0x00400004</td>
+              <td class="tg-fymr">auipc x19 64528</td>
+              <td class="tg-c3ow"><strong>la s3, Array_A</strong></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-7btt"></td>
+              <td class="tg-7btt">0x10010004</td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-baqh"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-0lax"></td>
+            </tr>
+            <tr>
+              <td class="tg-fymr">0x00400008</td>
+              <td class="tg-fymr">addi x19 x19 -4</td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-7btt"></td>
+              <td class="tg-7btt">0x10010000</td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-baqh"></td>
+              <td class="tg-c3ow"></td>
+              <td class="tg-0lax"></td>
+              <td class="tg-0lax"></td>
+            </tr>
+            <tr>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td><input type="text" /></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p
+        style="
+          background-color: #fff3cd;
+          border-left: 5px solid #ffa502;
+          padding: 10px;
+          font-weight: bold;
+        "
+      >
+        OBS: Salve o PDF em formato <strong>A2</strong> e
+        <strong>Paisagem</strong> para garantir que todas as informações da
+        página fiquem visíveis
+      </p>
+      <button type="button" onclick="window.print()">Salvar como PDF</button>
+    </form>
+
+    <p>
+      Se desejar reiniciar o programa, clique no botão <strong>Reset</strong>.
+    </p>
+    <img src="imgs/resetButton.png" alt="Botão Reset" />
+
+    <p><a href="tutorial-rars.html#exercises">&larr; Voltar ao tutorial</a></p>
+  </body>
+</html>

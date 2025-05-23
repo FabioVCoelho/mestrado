@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercício 1 - Linguagem Assembly RISC-V</title>
+    <style type="text/css">
+      @media print {
+        @page {
+          size: A2 portrait;
+          margin: 10mm;
+        }
+
+        body {
+          width: auto;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 20px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #49a1d4;
+      }
+      code {
+        background-color: #f0f0f0;
+        padding: 10px;
+        display: block;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        margin-bottom: 20px;
+      }
+      button {
+        background-color: #49a1d4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      input {
+        width: 100%;
+        border: none;
+        text-align: center;
+        background: transparent;
+        font-family: monospace;
+      }
+      .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+      .tg td {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg .tg-7btt {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: center;
+
+        vertical-align: top;
+      }
+      .tg .tg-fymr {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0pky {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0lax {
+        text-align: left;
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Exercício 01</h1>
+    <h3 for="studentName"><strong>Nome do aluno:</strong></h3>
+    <input
+      type="text"
+      id="studentName"
+      name="studentName"
+      placeholder="Digite seu nome aqui"
+      style="
+        margin-bottom: 20px;
+        display: block;
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background: transparent;
+        border: none;
+        font-family: Arial, sans-serif;
+      "
+    />
+
+    <h2>Objetivo</h2>
+    <p>
+      Executar o primeiro exemplo de programa em linguagem de montagem RISC-V.
+    </p>
+
+    <h2>Instruções</h2>
+    <ol>
+      <li>Abra o simulador de linguagem RISC-V.</li>
+      <li>No editor de texto do simulador, transcreva o código abaixo:</li>
+    </ol>
+
+    <pre><code>
+      # ------------------------------------------------------------
+      # Exercício 01 - Patterson pags. 54/55/56 (versão RISC-V)
+      # Expressão em C: f = (g + h) - (i + j)
+      # ------------------------------------------------------------
+      
+          .text
+      
+      main:
+          addi t1, zero, 4      # g = 4
+          addi t2, zero, 3      # h = 3
+          addi t3, zero, 2      # i = 2
+          addi t4, zero, 1      # j = 1
+      
+          add  t5, t1, t2       # t5 = g + h
+          add  t6, t3, t4       # t6 = i + j
+          sub  t0, t5, t6       # f = t5 - t6 (resultado em t0)
+      </code></pre>
+
+    <h2>Montagem e Execução</h2>
+    <p>Clique no botão <strong>Assemble</strong> para montar o programa.</p>
+    <img src="imgs/assemble.png" style="width: 99%" alt="Botão Assemble" />
+
+    <p>
+      A primeira instrução destacada será <b>addi t1, zero, 4</b> localizada no
+      endereço <b>0x00400000</b>.
+    </p>
+    <img src="imgs/firstInst.png" alt="Primeira instrução destacada" />
+
+    <p>
+      O registrador <strong>PC</strong> apontará para o endereço da instrução.
+      Observe:
+    </p>
+    <img src="imgs/initialPc.png" alt="Valor inicial do PC" />
+
+    <p>
+      Ao executar a instrução com <strong>Run One Step</strong>, o valor de
+      <strong>t1</strong> muda de <strong>0x00000000</strong> para
+      <strong>0x00000004</strong>.
+    </p>
+    <p>Antes:</p>
+    <img src="imgs/beforeExecution.png" alt="Antes da execução" />
+    <p>Depois:</p>
+    <img src="imgs/afterExecution.png" alt="Depois da execução" />
+
+    <p>
+      A execução dessa primeira instrução modificou apenas o conteúdo do
+      registrador <strong>t1</strong>. As demais instruções irão modificar
+      outros registradores. Execute o programa passo-a-passo e preencha a tabela
+      a seguir, marcando o conteúdo do registrador PC, a instrução a ser
+      executada e o valor dos registradores após a execução da instrução. Anote
+      o valor de um registrador apenas quando ele é modificado.
+    </p>
+
+    <h2>Preencha a tabela abaixo</h2>
+    <form id="execTable">
+      <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-7btt" colspan="2"><strong>Antes</strong></th>
+            <th class="tg-7btt" colspan="7">
+              <strong>Depois da execução da instrução</strong>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-fymr"><strong>PC</strong></td>
+            <td class="tg-fymr"><strong>Instrução</strong></td>
+            <td class="tg-7btt"><strong>R5</strong></td>
+            <td class="tg-7btt"><strong>R6</strong></td>
+            <td class="tg-7btt"><strong>R7</strong></td>
+            <td class="tg-7btt"><strong>R28</strong></td>
+            <td class="tg-7btt"><strong>R29</strong></td>
+            <td class="tg-7btt"><strong>R30</strong></td>
+            <td class="tg-7btt"><strong>R31</strong></td>
+          </tr>
+          <tr>
+            <td class="tg-0pky"></td>
+            <td class="tg-0pky"></td>
+            <td class="tg-fymr"><strong>(t0)</strong></td>
+            <td class="tg-fymr"><strong>(t1)</strong></td>
+            <td class="tg-fymr"><strong>(t2)</strong></td>
+            <td class="tg-fymr"><strong>(t3)</strong></td>
+            <td class="tg-fymr"><strong>(t4)</strong></td>
+            <td class="tg-fymr"><strong>(t5)</strong></td>
+            <td class="tg-fymr"><strong>(t6)</strong></td>
+          </tr>
+          <tr>
+            <td class="tg-0pky"></td>
+            <td class="tg-0pky"></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+            <td class="tg-0pky"><strong>0x00000000</strong></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><strong>0x00400000</strong></td>
+            <td class="tg-0lax"><strong>addi t1, zero, 4</strong></td>
+            <td class="tg-0lax"><strong>0x00000000</strong></td>
+            <td class="tg-0lax"><strong>0x00000004</strong></td>
+            <td class="tg-0lax"><strong>0x00000000</strong></td>
+            <td class="tg-0lax"><strong>0x00000000</strong></td>
+            <td class="tg-0lax"><strong>0x00000000</strong></td>
+            <td class="tg-0lax"><strong>0x00000000</strong></td>
+            <td class="tg-0lax"><strong>0x00000000</strong></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+          </tr>
+          <tr>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+            <td class="tg-0lax"><input type="text" /></td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          background-color: #fff3cd;
+          border-left: 5px solid #ffa502;
+          padding: 10px;
+          font-weight: bold;
+        "
+      >
+        OBS: Salve o PDF em formato <strong>A2</strong> e
+        <strong>Paisagem</strong> para garantir que todas as informações da
+        página fiquem visíveis
+      </p>
+      <button type="button" onclick="window.print()">Salvar como PDF</button>
+    </form>
+
+    <p>
+      <strong>Nota:</strong> Se for necessário reiniciar o programa, clique no
+      botão <strong>Reset</strong>.
+    </p>
+    <img src="imgs/resetButton.png" style="width: 99%" alt="Botão Reset" />
+
+    <p><a href="tutorial-rars.html#exercises">← Voltar ao tutorial</a></p>
+  </body>
+</html>

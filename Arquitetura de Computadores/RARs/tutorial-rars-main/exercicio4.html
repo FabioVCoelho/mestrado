@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exercício 4 - Linguagem Assembly RISC-V</title>
+    <style>
+      @media print {
+        @page {
+          size: A2 portrait;
+          margin: 10mm;
+        }
+
+        body {
+          width: auto;
+          margin: 0;
+          padding: 0;
+        }
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 20px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #49a1d4;
+      }
+      code,
+      pre {
+        background-color: #f0f0f0;
+        padding: 10px;
+        display: block;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        margin-bottom: 20px;
+      }
+      img {
+        max-width: 100%;
+        margin: 20px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #49a1d4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      input {
+        width: 100%;
+        border: none;
+        text-align: center;
+        background: transparent;
+        font-family: monospace;
+      }
+      .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+      .tg td {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+        text-align: center;
+      }
+      .tg .tg-7btt {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: center;
+
+        vertical-align: top;
+      }
+      .tg .tg-fymr {
+        border-color: inherit;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0pky {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top;
+      }
+      .tg .tg-0lax {
+        text-align: left;
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Exercício 04</h1>
+    <h3 for="studentName"><strong>Nome do aluno:</strong></h3>
+    <input
+      type="text"
+      id="studentName"
+      name="studentName"
+      placeholder="Digite seu nome aqui"
+      style="
+        margin-bottom: 20px;
+        display: block;
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        text-align: left;
+        background: transparent;
+        border: none;
+        font-family: Arial, sans-serif;
+      "
+    />
+
+    <h2>Objetivo</h2>
+    <p>Consolidar o uso da instrução de desvio condicional em RISC-V</p>
+
+    <h2>Instruções</h2>
+    <ol>
+      <li>Abra o simulador de linguagem RISC-V.</li>
+      <li>No editor de texto do simulador, transcreva o código abaixo:</li>
+    </ol>
+
+    <pre><code>    # ------------------------------------------------------------
+    # Exercício 04 - Patterson pag. 65/66 (versão RISC-V)
+    # if (i == j)
+    #     f = g + h;
+    # else
+    #     f = g - h;
+    # ------------------------------------------------------------
+            
+            .text
+        main:
+            addi s1, zero, 10     # g = 10
+            addi s2, zero, 20     # h = 20
+            addi s3, zero, 1      # i = 1
+            addi s4, zero, 2      # j = 2
+        
+            bne  s3, s4, Else     # if (i != j) goto Else
+            add  s0, s1, s2       # f = g + h
+            j Exit                # goto Exit
+        
+        Else:
+            sub  s0, s1, s2       # f = g - h
+        
+        Exit:
+            nop</code></pre>
+
+    <h2>Montagem e Execução</h2>
+    <p>Clique no botão <strong>Assemble</strong> para montar o programa.</p>
+    <img src="imgs/assemble3.png" style="width: 99%" alt="Botão Assemble" />
+
+    <p>
+      Observe que fazendo uso da instrução <strong>addi</strong> é possível
+      atribuir valores aos registradores <strong>s1</strong>,
+      <strong>s2</strong>, <strong>s3</strong> e <strong>s4</strong>, conforme
+      segue:
+    </p>
+
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-7btt">Registrador</th>
+          <th class="tg-7btt">Número do Registrador</th>
+          <th class="tg-7btt">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-0lax">s1</td>
+          <td class="tg-0lax">9</td>
+          <td class="tg-0lax">10</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">s2</td>
+          <td class="tg-0lax">18</td>
+          <td class="tg-0lax">20</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">s3</td>
+          <td class="tg-0lax">19</td>
+          <td class="tg-0lax">1</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">s4</td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">2</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      <strong>Obs:</strong><br />
+      O endereço <strong>1</strong> não se refere ao registrador
+      <strong>s1</strong>, mas sim ao registrador <strong>ra</strong>.<br />
+      O endereço do registrador <strong>s1</strong> é <strong>9</strong> (0x9).
+      Ele pode ser referenciado digitando-se <strong>x9</strong>, bem como
+      <strong>s1</strong>.
+    </p>
+
+    <p>
+      Faça a execução passo-a-passo do programa e, a cada instrução, preencha a
+      tabela abaixo cada vez que o valor de um registrador ou posição da memória
+      de dados for modificado.
+    </p>
+
+    <table class="tg">
+      <thead>
+        <tr>
+          <th colspan="2"><strong>Antes da execução da instrução</strong></th>
+          <th colspan="5"><strong>Depois da execução da instrução</strong></th>
+        </tr>
+        <tr>
+          <th><strong>PC</strong></th>
+          <th><strong>Instrução</strong></th>
+          <th><strong>R8</strong></th>
+          <th><strong>R9</strong></th>
+          <th><strong>R18</strong></th>
+          <th><strong>R19</strong></th>
+          <th><strong>R20</strong></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th><strong>(s0)</strong></th>
+          <th><strong>(s1)</strong></th>
+          <th><strong>(s2)</strong></th>
+          <th><strong>(s3)</strong></th>
+          <th><strong>(s4)</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0x00400000</strong></td>
+          <td><strong>addi s1, zero, 10</strong></td>
+          <td></td>
+          <td><strong>0x0000000A</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      Altere as instruções <strong>addi</strong> para atribuir os seguintes
+      valores aos registradores <strong>s1</strong>, <strong>s2</strong>,
+      <strong>s3</strong>, e <strong>s4</strong>
+      <strong>(note que agora s3 e s4 são iguais a 1)</strong>.
+    </p>
+
+    <table class="tg">
+      <thead>
+        <tr>
+          <th class="tg-7btt">Registrador</th>
+          <th class="tg-7btt">Número do Registrador</th>
+          <th class="tg-7btt">Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tg-0lax">s1</td>
+          <td class="tg-0lax">9</td>
+          <td class="tg-0lax">10</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">s2</td>
+          <td class="tg-0lax">18</td>
+          <td class="tg-0lax">20</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">s3</td>
+          <td class="tg-0lax">19</td>
+          <td class="tg-0lax">1</td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">s4</td>
+          <td class="tg-0lax">20</td>
+          <td class="tg-0lax">1</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Recarregue o programa com a opção <strong>Reset</strong>.</p>
+    <img src="imgs/reset.png" alt="Botão Reset" style="width: 99%" />
+
+    <p>
+      Faça a execução passo-a-passo do programa e, a cada instrução, preencha a
+      tabela abaixo cada vez que o valor de um registrador ou posição da memória
+      de dados for modificado.
+    </p>
+
+    <table class="tg">
+      <thead>
+        <tr>
+          <th colspan="2"><strong>Antes da execução da instrução</strong></th>
+          <th colspan="5"><strong>Depois da execução da instrução</strong></th>
+        </tr>
+        <tr>
+          <th><strong>PC</strong></th>
+          <th><strong>Instrução</strong></th>
+          <th><strong>R8</strong></th>
+          <th><strong>R9</strong></th>
+          <th><strong>R18</strong></th>
+          <th><strong>R19</strong></th>
+          <th><strong>R20</strong></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th><strong>(s0)</strong></th>
+          <th><strong>(s1)</strong></th>
+          <th><strong>(s2)</strong></th>
+          <th><strong>(s3)</strong></th>
+          <th><strong>(s4)</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0x00400000</strong></td>
+          <td><strong>addi s1, zero, 10</strong></td>
+          <td></td>
+          <td><strong>0x0000000A</strong></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+        <tr>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+          <td><input type="text" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <p
+      style="
+        background-color: #fff3cd;
+        border-left: 5px solid #ffa502;
+        padding: 10px;
+        font-weight: bold;
+      "
+    >
+      OBS: Salve o PDF em formato <strong>A2</strong> e
+      <strong>Paisagem</strong> para garantir que todas as informações da página
+      fiquem visíveis
+    </p>
+    <button type="button" onclick="window.print()">Salvar como PDF</button>
+
+    <p>
+      Compare as duas tabelas e analise a diferença entre o fluxo de instruções
+      executadas (veja a sequência de valores do <strong>PC</strong>) e o valor
+      final de <strong>s0</strong>.
+    </p>
+
+    <p>
+      Se desejar reiniciar o programa, clique no botão <strong>Reset</strong>.
+    </p>
+    <img src="imgs/resetButton.png" alt="Botão Reset" />
+
+    <p><a href="tutorial-rars.html#exercises">&larr; Voltar ao tutorial</a></p>
+  </body>
+</html>

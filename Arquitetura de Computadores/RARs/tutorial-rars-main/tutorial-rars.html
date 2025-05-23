@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tutorial do RARS</title>
+    <style>
+      body {
+        background-color: #ffffff;
+        color: #000000;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      h1,
+      h2,
+      h3 {
+        color: #49a1d4;
+      }
+      strong {
+        color: #49a1d4;
+      }
+      code {
+        background-color: #f0f0f0;
+        color: #000000;
+        padding: 10px;
+        display: block;
+        border-radius: 5px;
+        white-space: pre-wrap;
+      }
+      ul li {
+        margin-bottom: 8px;
+      }
+      img {
+        margin: 20px 0;
+        max-width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>TUTORIAL DO RARS (RISC-V Educational Resource)</h1>
+    <p>
+      <strong>Autor:</strong> Eduardo Michel Deves de Souza<br />
+      <strong>Revisão:</strong> Prof. Dr. Douglas Rossi de Melo
+    </p>
+
+    <h2>Introdução</h2>
+    <p>
+      RARS (RISC-V Assembler and Runtime Simulator) é um simulador que permite
+      montar e simular a execução de programas em linguagem de montagem RISC-V,
+      oferecendo suporte para as arquiteturas riscv32 e riscv64. Com
+      funcionalidades como depuração por breakpoints, suporte a chamadas de
+      sistema e comparação entre pseudo-instruções e código de máquina.
+    </p>
+
+    <h2>Como organizar seu código RISC-V</h2>
+    <p>
+      Antes de começar a usar o RARS, é importante entender como estruturar
+      corretamente um programa em linguagem de montagem RISC-V. O código é
+      dividido em duas partes principais: <strong>.data</strong> e
+      <strong>.text</strong>.
+    </p>
+
+    <h3>Formato geral do código</h3>
+    <p>Cada linha pode conter até quatro partes:</p>
+    <pre><code> ROTULO: 
+      MNEMÔNICO OPERANDOS # COMENTÁRIO </code></pre>
+
+    <ul>
+      <li>
+        <strong>Rótulo (label):</strong> Opcional. Serve para nomear uma posição
+        no código. Termina com dois-pontos (<strong>:</strong>).
+      </li>
+      <li>
+        <strong>Mnemonico:</strong> O nome da instrução (ex:
+        <strong>addi</strong>, <strong>lw</strong>, <strong>sw</strong>,
+        <strong>beq</strong>).
+      </li>
+      <li>
+        <strong>Operandos:</strong> Registradores e valores usados pela
+        instrução.
+      </li>
+      <li>
+        <strong>Comentário:</strong> Começa com <strong>#</strong> e serve pra
+        explicar o que a linha faz.
+      </li>
+    </ul>
+
+    <p><strong>Exemplo:</strong></p>
+    <pre><code>
+      main: 
+        addi x5, x0, 2        # x5 = 2 
+        addi x6, x0, 2        # x6 = 2 
+        soma: add x7, x5, x6  # x7 = x5 + x6
+    </code></pre>
+
+    <h3>Segmento de dados (.data)</h3>
+    <p>
+      O segmento <strong>.data</strong> é onde você define variáveis e vetores.
+      Ele vem <strong>antes</strong> do segmento <strong>.text</strong>, mas só
+      é necessário se você for usar dados no seu programa.
+    </p>
+
+    <p>Diretivas mais comuns:</p>
+    <ul>
+      <li>
+        <strong>.word</strong>: define um ou mais inteiros (ex: variáveis ou
+        vetores).
+      </li>
+      <li>
+        <strong>.asciiz</strong> ou <strong>.string</strong>: define uma string
+        (texto).
+      </li>
+    </ul>
+
+    <p><strong>Exemplo:</strong></p>
+    <pre><code>
+      .data 
+        num: .word 5 
+        vet: .word 10, 20, 30, 40 
+        msg: .string "Olá, mundo!"
+        buffer: .asciiz ""
+    </code></pre>
+
+    <h3>Segmento de texto (.text)</h3>
+    <p>
+      É nele que ficam as instruções do programa, ou seja, o que será executado
+      pelo simulador.
+    </p>
+
+    <p><strong>Exemplo:</strong></p>
+    <pre><code>
+      .text
+        main: 
+        addi x5, x0, 2       # x5 = 2 
+        addi x6, x0, 2       # x6 = 2 
+        add x7, x5, x6       # x7 = x5 + x6
+    </code></pre>
+
+    <h2>1 - Baixe o RARS</h2>
+    <p>
+      O RARS precisa ser baixado e executado a partir de um arquivo JAR. É
+      necessário ter pelo menos o Java 8 instalado para rodá-lo. A versão mais
+      recente pode ser encontrada na página de releases, enquanto a versão com
+      os últimos desenvolvimentos está disponível na release contínua.
+    </p>
+    <p>
+      Você pode baixar o RARS diretamente do repositório oficial:
+      <a
+        href="https://github.com/TheThirdOne/rars/releases/latest"
+        target="_blank"
+        >https://github.com/TheThirdOne/rars</a
+      >.
+    </p>
+
+    <h2>
+      2 - Escrevendo seu primeiro programa em linguagem de montagem RISC-V
+    </h2>
+    <p>
+      Para começar, clique no ícone de criação de arquivo no menu superior para
+      criar um novo arquivo.
+    </p>
+    <img src="imgs/create_file.png" alt="Ícone de criação de arquivo do RARS" />
+
+    <p>Depois, salve o arquivo antes de começar a escrever seu código.</p>
+    <img src="imgs/saveFile.png" alt="Como salvar o arquivo no RARS" />
+
+    <p>
+      Após salvar o arquivo, você pode começar a digitar seu programa em
+      linguagem assembly RISC-V diretamente na aba <strong>Edit</strong>,
+      localizada no menu superior.
+    </p>
+    <img src="imgs/edit.png" alt="Aba Edit do RARS" />
+
+    <p>
+      Se precisar de ajuda com a sintaxe ou comandos disponíveis, clique no
+      botão <strong>Help</strong>. Esse botão abre uma seção com instruções e
+      exemplos úteis para a escrita correta do código.
+    </p>
+    <img src="imgs/help.png" alt="Botão Help do RARS" />
+
+    <h2>3 - Monte seu programa no RARS</h2>
+    <p>
+      Após escrever seu código, clique no botão
+      <strong>Assemble Code</strong> para iniciar o processo de montagem. Essa
+      etapa converte o código escrito em linguagem de montagem (assembly) para
+      linguagem de máquina, que é compreendida pelo simulador.
+    </p>
+    <img src="imgs/assemble.png" alt="Botão Assemble Code no RARS" />
+
+    <p>
+      Ao concluir a montagem, o simulador alterna automaticamente para a aba
+      <strong>Execute</strong>, onde o código convertido é exibido e fica pronto
+      para execução. Nessa aba, é possível visualizar cada instrução com seus
+      respectivos endereços.
+    </p>
+    <img
+      src="imgs/execute.png"
+      alt="Aba Execute mostrando o código convertido"
+    />
+
+    <h2>4 - Entendendo as janelas do RARS</h2>
+    <p>O RARS é dividido em várias janelas com funções específicas:</p>
+    <ul>
+      <li>
+        <strong style="color: #ed1c24">Menu de opções:</strong> permite abrir e
+        salvar arquivos, exportar o código, montar o código, iniciar a execução
+        (completa ou passo a passo), reverter o último passo e reiniciar o
+        simulador.
+      </li>
+      <li><strong style="color: #fff200">Edit:</strong> editor de código.</li>
+      <li>
+        <strong style="color: #fff200">Execute:</strong> exibe o código
+        convertido em linguagem de máquina.
+      </li>
+      <li>
+        <strong style="color: #00a2e8">Registers:</strong> mostra os valores
+        atuais dos registradores.
+      </li>
+      <li>
+        <strong style="color: #22b14c">Console:</strong> exibe mensagens e
+        saídas.
+      </li>
+    </ul>
+    <img src="imgs/janelas.png" alt="Janelas principais do RARS" />
+
+    <p>
+      A seção de execução, apresentada na imagem abaixo, mostra o código montado
+      e o estado atual da memória. O painel é subdividido em duas áreas: o
+      <strong style="color: #a349a4">Text Segment</strong>, que exibe as linhas
+      de código após a montagem, e o
+      <strong style="color: #ff7f27">Data Segment</strong>, que mostra a
+      memória. O usuário pode navegar pelas páginas de memória, visualizar dados
+      em diferentes formatos e acompanhar apenas os endereços alterados.
+    </p>
+    <img
+      src="imgs/executeDetail.png"
+      alt="Detalhamento do painel Execute com Text e Data Segment"
+    />
+
+    <h2>5 - Execute seu programa no RARS</h2>
+    <p>
+      Com o código montado, você pode executar o programa passo a passo clicando
+      no botão <strong>Run One Step</strong>. Cada clique executa uma única
+      instrução, permitindo acompanhar as alterações feitas nos registradores e
+      a indicação da instrução atual no <strong>Text Segment</strong>.
+    </p>
+    <img src="imgs/runOneStep.png" alt="Botão Run One Step no RARS" />
+
+    <p>
+      Se preferir, é possível executar o programa por completo clicando no botão
+      <strong>Run</strong>. Isso fará com que todas as instruções sejam
+      processadas de uma vez, exibindo os resultados finais nos registradores e
+      no <strong>Console</strong>.
+    </p>
+    <img src="imgs/run.png" alt="Execução completa do programa no RARS" />
+
+    <h2 id="exercises">6 - Crie você mesmo seus programas</h2>
+    <p>
+      Agora que você conhece o funcionamento do RARS, execute os exercícios 1 a
+      4 propostos para praticar a criação de programas em linguagem de montagem
+      RISC-V.
+    </p>
+
+    <ul style="list-style: none; padding-left: 0; margin-top: 20px">
+      <li style="margin-bottom: 10px">
+        <a
+          href="exercicio1.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 1
+        </a>
+      </li>
+      <li style="margin-bottom: 10px">
+        <a
+          href="exercicio2.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 2
+        </a>
+      </li>
+      <li>
+        <a
+          href="exercicio3.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 3
+        </a>
+      </li>
+      <li>
+        <a
+          href="exercicio4.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 4
+        </a>
+      </li>
+      <li>
+        <a
+          href="exercicio5.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 5
+        </a>
+      </li>
+      <li>
+        <a
+          href="exercicio6.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 6
+        </a>
+      </li>
+      <li>
+        <a
+          href="exercicio7.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 7
+        </a>
+      </li>
+      <li>
+        <a
+          href="exercicio8.html"
+          style="text-decoration: none; font-weight: bold; color: #49a1d4"
+        >
+          ➤ Exercício 8
+        </a>
+      </li>
+    </ul>
+  </body>
+</html>
