@@ -7,7 +7,7 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Full
-Input = String
+Input = Stream
 Parser = SLR
 #RegularDefinitions
 
@@ -40,13 +40,17 @@ repita = pal : "repita"
 <cmd>
 <repita>
 <dir>
+<ident>
+<cham_func>
 
 #Grammar
 <prog>::= <l_func> ;
 <l_func>::= <l_func> <func> | <func> ;
 <func>::= <def_func> | <cmd> ;
-<def_func>::= aprenda pal <l_cmd> fim ;
+<def_func>::= aprenda <ident> <l_cmd> fim ;
 <l_cmd> ::= <l_cmd> <cmd> | <cmd>;
-<cmd> ::= <dir> num | <repita> | cs | pal ;
-	
+<cmd> ::= <dir> num | <repita> | cs | <cham_func> ;
+<repita> ::= repita num "[" <l_cmd> "]";
 <dir> ::= pe | pd | pf | pt;
+<cham_func> ::= <ident>;
+<ident> ::= pal;
