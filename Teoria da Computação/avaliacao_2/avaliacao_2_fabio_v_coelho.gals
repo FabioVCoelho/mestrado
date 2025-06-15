@@ -1,0 +1,52 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = String
+Parser = SLR
+#RegularDefinitions
+
+#Tokens
+:[\n\s\r\t]
+:[/][/].*
+
+pal: [a-z]+
+num: [0-9]+
+
+cs = pal : "cs"
+aprenda = pal : "aprenda"
+fim = pal : "fim"
+
+pd = pal : "pd"
+pt = pal : "pt"
+pf = pal : "pf"
+pe = pal : "pe"
+repita = pal : "repita"
+
+"["
+"]"
+
+#NonTerminals
+<prog>
+<l_func>
+<func>
+<def_func>
+<l_cmd>
+<cmd>
+<repita>
+<dir>
+
+#Grammar
+<prog>::= <l_func> ;
+<l_func>::= <l_func> <func> | <func> ;
+<func>::= <def_func> | <cmd> ;
+<def_func>::= aprenda pal <l_cmd> fim ;
+<l_cmd> ::= <l_cmd> <cmd> | <cmd>;
+<cmd> ::= <dir> num | <repita> | cs | pal ;
+	
+<dir> ::= pe | pd | pf | pt;
