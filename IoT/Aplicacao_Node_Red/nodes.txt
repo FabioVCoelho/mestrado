@@ -1,0 +1,744 @@
+[
+    {
+        "id": "ee4c258df48bb1f5",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8ffb5a38d996aebf",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "67c479a0072a52cc",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6019a59d59013611",
+        "type": "mqtt-broker",
+        "name": "Localhost",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "793c1f81b147f066",
+        "type": "mqtt-broker",
+        "name": "Professors_Mosquitto",
+        "broker": "test.mosquitto.org",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "8f0f84cdb8bbf989",
+        "type": "http request",
+        "z": "ee4c258df48bb1f5",
+        "name": "weatherAPI",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://api.weatherbit.io/v2.0/current?lat=38.895037&lon=-77.036543&key=02fe2a2bf2064677b28d31f55b39fe1e&include=minutely",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 280,
+        "wires": [
+            [
+                "6af0fac5c2e04ad8",
+                "abb1ed2dbf3a4ea7",
+                "6b68036489bd9e23",
+                "b714c48ff312aabe"
+            ]
+        ]
+    },
+    {
+        "id": "6af0fac5c2e04ad8",
+        "type": "debug",
+        "z": "ee4c258df48bb1f5",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c837d3824acd2397",
+        "type": "inject",
+        "z": "ee4c258df48bb1f5",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 280,
+        "wires": [
+            [
+                "8f0f84cdb8bbf989"
+            ]
+        ]
+    },
+    {
+        "id": "6b68036489bd9e23",
+        "type": "debug",
+        "z": "ee4c258df48bb1f5",
+        "name": "uv",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload.data[0].uv",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 850,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "b714c48ff312aabe",
+        "type": "debug",
+        "z": "ee4c258df48bb1f5",
+        "name": "temp",
+        "active": false,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload.data[0].temp",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "abb1ed2dbf3a4ea7",
+        "type": "function",
+        "z": "ee4c258df48bb1f5",
+        "name": "filter_json",
+        "func": "var filterValues = { payload: {\"temp\": msg.payload.data[0].temp, \"uv\": msg.payload.data[0].uv, \"city\": msg.payload.data[0].city_name } };\nreturn filterValues;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 400,
+        "wires": [
+            [
+                "82e0e6d9b3ae3f64"
+            ]
+        ]
+    },
+    {
+        "id": "82e0e6d9b3ae3f64",
+        "type": "debug",
+        "z": "ee4c258df48bb1f5",
+        "name": "Temp, UV and City",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "682005df864ad92f",
+        "type": "mqtt in",
+        "z": "8ffb5a38d996aebf",
+        "name": "MQTT_Local_get",
+        "topic": "Mestrado_IoT",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6019a59d59013611",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 380,
+        "y": 360,
+        "wires": [
+            [
+                "0a1988b679c04342"
+            ]
+        ]
+    },
+    {
+        "id": "38f2bc07486aa514",
+        "type": "mqtt out",
+        "z": "8ffb5a38d996aebf",
+        "name": "MQTT_Local",
+        "topic": "Mestrado_IoT",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6019a59d59013611",
+        "x": 830,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "7c582339a81424ba",
+        "type": "inject",
+        "z": "8ffb5a38d996aebf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 300,
+        "wires": [
+            [
+                "75f40ce4ad16b52c"
+            ]
+        ]
+    },
+    {
+        "id": "0a1988b679c04342",
+        "type": "debug",
+        "z": "8ffb5a38d996aebf",
+        "name": "Payload_from_sub",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "75f40ce4ad16b52c",
+        "type": "http request",
+        "z": "8ffb5a38d996aebf",
+        "name": "weatherAPI",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://api.weatherbit.io/v2.0/current?lat=38.895037&lon=-77.036543&key=02fe2a2bf2064677b28d31f55b39fe1e&include=minutely",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "26600919ebf77049"
+            ]
+        ]
+    },
+    {
+        "id": "26600919ebf77049",
+        "type": "function",
+        "z": "8ffb5a38d996aebf",
+        "name": "filter_json",
+        "func": "var filterValues = { payload: {\"temp\": msg.payload.data[0].temp, \"uv\": msg.payload.data[0].uv, \"city\": msg.payload.data[0].city_name } };\nreturn filterValues;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 220,
+        "wires": [
+            [
+                "38f2bc07486aa514"
+            ]
+        ]
+    },
+    {
+        "id": "6903d8de2a9d4047",
+        "type": "mqtt in",
+        "z": "67c479a0072a52cc",
+        "name": "",
+        "topic": "coelho_IoT_univali",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "793c1f81b147f066",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 500,
+        "wires": [
+            [
+                "b3da6f31539cdf48",
+                "2428dac32698bb37"
+            ]
+        ]
+    },
+    {
+        "id": "b3da6f31539cdf48",
+        "type": "debug",
+        "z": "67c479a0072a52cc",
+        "name": "Cidade",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "80ab9b121a833bbc",
+        "type": "inject",
+        "z": "67c479a0072a52cc",
+        "name": "Carimbo data/hora",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 40,
+        "wires": [
+            [
+                "4e9b250ad0d6d21b"
+            ]
+        ]
+    },
+    {
+        "id": "4e9b250ad0d6d21b",
+        "type": "http request",
+        "z": "67c479a0072a52cc",
+        "name": "weatherAPI",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://api.weatherbit.io/v2.0/current?lat=-33.447487&lon=-70.673676&key=02fe2a2bf2064677b28d31f55b39fe1e&include=minutely",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 40,
+        "wires": [
+            [
+                "0aac49af4ec8626d",
+                "a6b4bc719a030225",
+                "6527db3feaa7c8e0"
+            ]
+        ]
+    },
+    {
+        "id": "0aac49af4ec8626d",
+        "type": "debug",
+        "z": "67c479a0072a52cc",
+        "name": "Temp",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.data[0].temp",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "a6b4bc719a030225",
+        "type": "debug",
+        "z": "67c479a0072a52cc",
+        "name": "Full",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "6527db3feaa7c8e0",
+        "type": "function",
+        "z": "67c479a0072a52cc",
+        "name": "Temp Filter",
+        "func": "var filterValues = { payload: {\"temp\": msg.payload.data[0].temp} };\nreturn filterValues;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 140,
+        "wires": [
+            [
+                "111d8ca9492d1d8d"
+            ]
+        ]
+    },
+    {
+        "id": "111d8ca9492d1d8d",
+        "type": "mqtt out",
+        "z": "67c479a0072a52cc",
+        "name": "coelho_IoT_univali_out",
+        "topic": "coelho_IoT_univali",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "793c1f81b147f066",
+        "x": 970,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "ed78594f0a829d68",
+        "type": "http request",
+        "z": "67c479a0072a52cc",
+        "name": "GeoCode",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Content-Type",
+                "keyValue": "",
+                "valueType": "application/json",
+                "valueValue": ""
+            }
+        ],
+        "x": 480,
+        "y": 580,
+        "wires": [
+            [
+                "61c2f3b1ea069549"
+            ]
+        ]
+    },
+    {
+        "id": "2428dac32698bb37",
+        "type": "function",
+        "z": "67c479a0072a52cc",
+        "name": "Get_city_location",
+        "func": "msg.url = \"https://api.weatherbit.io/v2.0/geocode?city=\" + msg.payload  + \"&key=02fe2a2bf2064677b28d31f55b39fe1e\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 580,
+        "wires": [
+            [
+                "ed78594f0a829d68"
+            ]
+        ]
+    },
+    {
+        "id": "1c75c3e849cb77a0",
+        "type": "inject",
+        "z": "67c479a0072a52cc",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 580,
+        "wires": [
+            [
+                "2428dac32698bb37"
+            ]
+        ]
+    },
+    {
+        "id": "61c2f3b1ea069549",
+        "type": "function",
+        "z": "67c479a0072a52cc",
+        "name": "get_lat_long_and_create_weatherbit_url",
+        "func": "msg.lat = msg.payload.lat\nmsg.lon = msg.payload.lon\nmsg.payload = {}\nmsg.url = \"http://api.weatherbit.io/v2.0/current?lat=\" + msg.lat +\"&lon=\" + msg.lon +\"&key=02fe2a2bf2064677b28d31f55b39fe1e&include=minutely\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 700,
+        "wires": [
+            [
+                "0c6044c2705d37e8"
+            ]
+        ]
+    },
+    {
+        "id": "0c6044c2705d37e8",
+        "type": "http request",
+        "z": "67c479a0072a52cc",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 910,
+        "y": 700,
+        "wires": [
+            [
+                "663768b78028ba0c",
+                "768966d34892a552"
+            ]
+        ]
+    },
+    {
+        "id": "663768b78028ba0c",
+        "type": "function",
+        "z": "67c479a0072a52cc",
+        "name": "Payload_Jordan",
+        "func": "var filterValues = { payload: {\"temp\": msg.payload.data[0].temp, \"uv\": msg.payload.data[0].uv, \"city\": msg.payload.data[0].city_name } };\nmsg.payload = \"Aluno: Fábio Volkmann. Cidade:\" + filterValues.payload.city + \" . Temperatura: \" + filterValues.payload.temp + \" Celsius.\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 700,
+        "wires": [
+            [
+                "b79a87d9d70c6f34",
+                "6db23f668eb7077e"
+            ]
+        ]
+    },
+    {
+        "id": "b79a87d9d70c6f34",
+        "type": "mqtt out",
+        "z": "67c479a0072a52cc",
+        "name": "Jordan_IoT_univali",
+        "topic": "Jordan_IoT_univali",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "793c1f81b147f066",
+        "x": 1290,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "07f74fc262820874",
+        "type": "mqtt in",
+        "z": "67c479a0072a52cc",
+        "name": "My Mosquitto",
+        "topic": "Mestrado_IoT_Fabio",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "6019a59d59013611",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 70,
+        "y": 660,
+        "wires": [
+            [
+                "2428dac32698bb37"
+            ]
+        ]
+    },
+    {
+        "id": "768966d34892a552",
+        "type": "debug",
+        "z": "67c479a0072a52cc",
+        "name": "debug 2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "6db23f668eb7077e",
+        "type": "debug",
+        "z": "67c479a0072a52cc",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1280,
+        "y": 740,
+        "wires": []
+    }
+]
