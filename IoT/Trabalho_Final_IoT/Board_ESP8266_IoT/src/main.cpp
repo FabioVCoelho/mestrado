@@ -6,7 +6,7 @@
 
 // ================= EDIT YOUR DETAILS HERE =================
 const char* ssid = "DENISE_2.4Ghz";       // Keep the quotes!
-const char* password = "Derrnise301*"; 
+const char* password = "PASSWORD";
 // ==========================================================
 
 // Define the pin where the data wire is connected
